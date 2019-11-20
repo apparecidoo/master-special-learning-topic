@@ -17,7 +17,7 @@ class Activity1:
         # extract y
         y = _matrix.Copy(readmatrix)
         for col in range(len(readmatrix[0]) - 1):
-            y = numpy.delete(y, 0, 1)        
+            y = numpy.delete(y, 0, 1)   
         
         result_lin = leastSquares.LinearLeastSquares(matrix, y)
         _matrix.matrix_print("\n Beta for LinearLeastSquares", result_lin)
@@ -43,3 +43,5 @@ class Activity1:
         self.dataset_test("datasets/alpswater.csv", [190])
         self.dataset_test("datasets/books_attend_grade.csv", [0, 9])
         self.dataset_test("datasets/us_census.csv", [2010.0])
+
+Activity1().test()

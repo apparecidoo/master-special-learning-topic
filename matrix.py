@@ -1,15 +1,16 @@
 import csv
-import numpy
+import numpy as np
+import mathematic as _math
 
 def ReadCsv(path, delimiter=";", mtype="float"):
     reader = csv.reader(open(path, "r"), delimiter = delimiter)
     x = list(reader)
-    return numpy.array(x).astype(mtype)
+    return np.array(x).astype(mtype)
 
-def matrix_print(Title, M):
+def matrix_print(Title, M, roundVal = 3):
     print(Title)
     for row in M:
-        print([round(x,4)+0 for x in row])
+        print([round(x,roundVal)+0 for x in row])
 
 def PrintTwo(Action, Title1, M1, Title2, M2):
     print(Action)
@@ -54,20 +55,44 @@ def MultiplicationEscalarMatrix(matrix_a, matrix_b):
             result[row][col] = matrix_a[row][col] * matrix_b[row][0]
     return result
 
-def AddBeginColumn(matrix, value):
+def RemoveColumn(matrix, pos):
+    rows = len(matrix)
+    cols = len(matrix[0])
+    newcols = len(matrix[0]) - 1
+    newmatrix = Create(rows, newcols)
+
+    for i in range(rows):
+        for j in range(cols):
+            if(j == pos):
+                continue
+            else:
+                if(j > pos):
+                    newmatrix[i][j - 1] = matrix[i][j]
+                else:
+                    newmatrix[i][j] = matrix[i][j]
+
+    return newmatrix
+
+def AddColumn(matrix, pos, value = 0):
     rows = len(matrix)
     cols = len(matrix[0])
     newcols = len(matrix[0]) + 1
     newmatrix = Create(rows, newcols)
 
     for i in range(rows):
-        newmatrix[i][0] = value
-
-    for i in range(rows):
         for j in range(cols):
-            newmatrix[i][j + 1] = matrix[i][j]
+            if(j == pos):
+                newmatrix[i][j] = value
+            else:
+                if(j > pos):
+                    newmatrix[i][j + 1] = matrix[i][j]
+                else:
+                    newmatrix[i][j] = matrix[i][j]
 
     return newmatrix
+
+def AddBeginColumn(matrix, value):
+    return AddColumn(matrix, 0, value)
 
 def AddEndColumnPotentialLast(matrix, potential):
     rows = len(matrix)
@@ -149,6 +174,38 @@ def Multiplication(matrix_a, matrix_b):
                 result[i][j] += matrix_a[i][k] * matrix_b[k][j]
     return result
 
+def Subtraction(matrix_a, matrix_b):
+    rows_a = len(matrix_a)
+    cols_a = len(matrix_a[0])
+    rows_b = len(matrix_b)
+
+    if rows_a != rows_b:
+        print("Incorrect dimensions.")
+        return
+
+    result = Create(rows_a, cols_a)
+
+    for i in range(rows_a):
+        for j in range(cols_a):
+            result[i][j] += matrix_a[i][j] - matrix_b[i][j]
+    return result
+
+def Sum(matrix_a, matrix_b):
+    rows_a = len(matrix_a)
+    cols_a = len(matrix_a[0])
+    rows_b = len(matrix_b)
+
+    if rows_a != rows_b:
+        print("Incorrect dimensions.")
+        return
+
+    result = Create(rows_a, cols_a)
+
+    for i in range(rows_a):
+        for j in range(cols_a):
+            result[i][j] += matrix_a[i][j] + matrix_b[i][j]
+    return result
+
 def Inverse(matrix_a, tol=None):
     CheckSquareness(matrix_a)
     CheckNonSingular(matrix_a)
@@ -190,3 +247,39 @@ def Transpose(matrix):
             matrixtrans[j][i] = matrix[i][j]
 
     return matrixtrans
+
+def Covariance(matrix):
+    if(len(matrix[0]) == 2):
+        x = Transpose(matrix)[0]
+        y = Transpose(matrix)[1]
+        return [[_math.Covariance(x,x), _math.Covariance(x,y)], [_math.Covariance(y,x), _math.Covariance(y,y)]]
+    else:
+        if(len(matrix[0]) == 3):
+            x = Transpose(matrix)[0]
+            y = Transpose(matrix)[1]
+            z = Transpose(matrix)[2]
+            return [[_math.Covariance(x,x), _math.Covariance(x,y), _math.Covariance(x,z)], [_math.Covariance(y,x), _math.Covariance(y,y), _math.Covariance(y,z)], [_math.Covariance(z,x), _math.Covariance(z,y), _math.Covariance(z,z)]]
+        else:
+            raise ArithmeticError("Cannot calculate Eigen Value different of 2x2 or 3x3 matrix.")
+
+def LinearSystem(matrix):
+    A = RemoveColumn(matrix, len(matrix[0]) - 1)
+    B = Transpose([Transpose(matrix)[-1]])
+    AM = Copy(A)
+    n = len(A)
+    BM = Copy(B)
+    
+    indices = list(range(n))
+    for fd in range(n):
+        fdScaler = 1.0 / AM[fd][fd]
+        for j in range(n):
+            AM[fd][j] *= fdScaler
+        BM[fd][0] *= fdScaler
+        
+        for i in indices[0:fd] + indices[fd+1:]:
+            crScaler = AM[i][fd]
+            for j in range(n):
+                AM[i][j] = AM[i][j] - crScaler * AM[fd][j]
+            BM[i][0] = BM[i][0] - crScaler * BM[fd][0]
+
+    return Multiplication(A, BM)
