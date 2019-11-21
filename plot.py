@@ -1,7 +1,6 @@
-import numpy as np
 import matplotlib.pyplot as plt
 
-def Simple2D(data, title, labelx, labely):
+def SimplePointData2D(data, title, labelx, labely):
     plt.xlabel(labelx)
     plt.ylabel(labely)
     plt.title(title)
