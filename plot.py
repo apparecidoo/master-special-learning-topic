@@ -1,3 +1,10 @@
+"""
+Created on Wed Nov 1 19:03:56 2019
+@author: Murillo Freitas Bouzon
+@project: PEL-208 Exercicio 2: Implementação da Análise de Componentes Principal (PCA)
+Funções para exibição de gráficos
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
