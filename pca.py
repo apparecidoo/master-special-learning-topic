@@ -72,5 +72,5 @@ def EigenVector(cov, eValues):
     else:
         raise ArithmeticError("Cannot calculate Eigen Value different of 2x2 matrix.")
 
-def PcaTransformation(matrix, eigVec):
-    return np.matmul(eigVec, matrix)
+def Transformation(matrix, eVector):
+    return np.matmul(eVector, matrix)

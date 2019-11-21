@@ -4,6 +4,7 @@ import mathematic as _math
 import pca
 import matplotlib.pyplot as plt
 import pandas as pd
+import plot
 
 class Activity2:
     def __init__(self):
@@ -11,15 +12,15 @@ class Activity2:
 
     def dataset_test(self, path, datatype="float"):        
         print(">>>>>> " + path + " <<<<<<")
-        readmatrix = _matrix.ReadCsv(path, ";", datatype)
-        readmatrix = _matrix.Transpose(readmatrix)
-
-        eValues, eVectors = pca.Pca(readmatrix)
+        originalMatrix = _matrix.ReadCsv(path, ";", datatype)
+        originalMatrix = _matrix.Transpose(originalMatrix)
+        auxMatrix = _matrix.Copy(originalMatrix)
+        eValues, eVectors = pca.Pca(auxMatrix)
         
         _matrix.matrix_print("EigenVector", eVectors)
         _matrix.matrix_print("EigenValue", [eValues])
 
-        # plot of relevance components
+        # plot relevance components
         left = [i for i in range(len(eValues))]
         tick_label = ["PC" + str(i+1) for i in range(len(eValues))]
         right = [i*100 / sum(eValues) for i in eValues]
@@ -31,14 +32,12 @@ class Activity2:
         plt.title("Relevance Components")
         plt.show()
 
-        # plot of data transformed in the new space
-        transformedData = pca.PcaTransformation(readmatrix, eVectors)
-        plt.xlabel('PC1')
-        plt.ylabel('PC2')
-        plt.title(path)
-        plt.ylim(min(transformedData[1]) - abs(min(transformedData[1])*0.1), max(transformedData[1]) + abs(max(transformedData[1])*0.1))
-        plt.plot(transformedData[0], transformedData[1], 'o', color='red')
-        plt.show()
+        # plot data transformed in the new space
+        plot.Simple2D(originalMatrix, path, "PC1", "PC2")
+
+        # plot data transformed in the new space
+        transformedData = pca.Transformation(originalMatrix, eVectors)
+        plot.Simple2D(transformedData, path, "PC1", "PC2")
 
         print("\n--------------------------------------------------")
     
