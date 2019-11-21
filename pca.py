@@ -72,12 +72,5 @@ def EigenVector(cov, eValues):
     else:
         raise ArithmeticError("Cannot calculate Eigen Value different of 2x2 matrix.")
 
-def PcaTransform(matrix, eigVec):
+def PcaTransformation(matrix, eigVec):
     return np.matmul(eigVec, matrix)
-
-def PcaInverseTransform(data, eigVec, mean):
-    mult = np.matmul(np.linalg.inv(eigVec.T), data)
-    for i in range(len(mult)):
-        for j in range(len(mult[i])):
-            mult[i][j] + mean[i]
-    return mult
