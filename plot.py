@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 def SimplePointData2D(data, title, labelx, labely):
     plt.xlabel(labelx)
@@ -8,18 +9,17 @@ def SimplePointData2D(data, title, labelx, labely):
     plt.plot(data[0], data[1], 'o', color='red')
     plt.show()
 
-def Lda(X_lda, y, label_dict, title = 'Plot Lda'):
+def LdaIris2D(X_lda, y, label_dict, title = 'Plot Lda'):
     ax = plt.subplot(111)
     for label,marker,color in zip(
         range(0,3),('^', 's', 'o'),('blue', 'red', 'green')):
-
-        plt.scatter(x=X_lda[:,0].real[y == label],
+            plt.scatter(x=X_lda[:,0].real[y == label],
                 y=X_lda[:,1].real[y == label],
                 marker=marker,
                 color=color,
                 alpha=0.5,
                 label=label_dict[label]
-                )
+            )
 
     plt.xlabel('LD1')
     plt.ylabel('LD2')
@@ -40,4 +40,14 @@ def Lda(X_lda, y, label_dict, title = 'Plot Lda'):
 
     plt.grid()
     plt.tight_layout
+    plt.show()
+
+def Kmeans2D(x, y, centroids = [[]], title = 'Kmeans'):
+    plt.title(title)
+    plt.scatter(x[:, 0], x[:, 1], s=50)    
+    plt.scatter(x[:, 0], x[:, 1], c=y, s=50, cmap='viridis')
+    
+    if(not centroids == [[]]):
+        plt.scatter(centroids[:, 0], centroids[:, 1], c='black', s=100, alpha=0.4)
+
     plt.show()

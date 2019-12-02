@@ -60,6 +60,9 @@ def RemoveColumn(matrix, pos):
     cols = len(matrix[0])
     newcols = len(matrix[0]) - 1
     newmatrix = Create(rows, newcols)
+    
+    if(pos == cols):
+        cols = cols - 1
 
     for i in range(rows):
         for j in range(cols):
@@ -73,7 +76,10 @@ def RemoveColumn(matrix, pos):
 
     return newmatrix
 
-def AddColumn(matrix, pos, value = 0):
+def AddColumn(matrix, pos = 0, value = 0):
+    if(pos == -1):
+        pos = len(matrix[0])
+
     rows = len(matrix)
     cols = len(matrix[0])
     newcols = len(matrix[0]) + 1
@@ -240,7 +246,7 @@ def Transpose(matrix):
     rows = len(matrix)
     cols = len(matrix[0])
 
-    matrixtrans = Create(cols, rows)
+    matrixtrans = Create(rows, cols)
 
     for i in range(rows):
         for j in range(cols):

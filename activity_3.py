@@ -17,11 +17,16 @@ class Activity3:
         names = iris.target_names
         x = iris.data
         y = iris.target
+        print(x)
+        print(y)
+        print(names)
+        # pure plot
+        plot.LdaIris2D(x, y, names, 'Iris projection without LDA')
 
         # Lda without PCA
         resultLda = lda.Lda(x, y)
         LdaData = lda.Transform(x, resultLda, 2)
-        plot.Lda(LdaData, y, names, 'LDA without PCA: Iris projection with first 2 linear discriminants')
+        plot.LdaIris2D(LdaData, y, names, 'LDA without PCA: Iris projection with first 2 linear discriminants')
 
         # Lda with Pca
         resultPca = PCA(n_components = 2)
@@ -30,6 +35,6 @@ class Activity3:
         resultLda2 = lda.Lda(PcaData, y)
         print(resultLda2)
         LdaData = lda.Transform(PcaData, resultLda2, 2)
-        plot.Lda(LdaData, y, names, 'LDA with PCA: Iris projection with first 2 linear discriminants')
+        plot.LdaIris2D(LdaData, y, names, 'LDA with PCA: Iris projection with first 2 linear discriminants')
 
 Activity3().test()
