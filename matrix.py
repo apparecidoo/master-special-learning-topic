@@ -56,6 +56,9 @@ def MultiplicationEscalarMatrix(matrix_a, matrix_b):
     return result
 
 def RemoveColumn(matrix, pos):
+    if(pos == -1):
+        pos = len(matrix[0])
+
     rows = len(matrix)
     cols = len(matrix[0])
     newcols = len(matrix[0]) - 1
@@ -74,7 +77,7 @@ def RemoveColumn(matrix, pos):
                 else:
                     newmatrix[i][j] = matrix[i][j]
 
-    return newmatrix
+    return np.asarray(newmatrix)
 
 def AddColumn(matrix, pos = 0, value = 0):
     if(pos == -1):
@@ -95,7 +98,7 @@ def AddColumn(matrix, pos = 0, value = 0):
                 else:
                     newmatrix[i][j] = matrix[i][j]
 
-    return newmatrix
+    return np.asarray(newmatrix)
 
 def AddBeginColumn(matrix, value):
     return AddColumn(matrix, 0, value)
@@ -211,6 +214,15 @@ def Sum(matrix_a, matrix_b):
         for j in range(cols_a):
             result[i][j] += matrix_a[i][j] + matrix_b[i][j]
     return result
+
+def DivideXY(matrix):
+    x = RemoveColumn(Copy(matrix), -1)
+    y = Copy(matrix)
+    
+    for i in range(len(matrix[0]) - 1):
+        y = RemoveColumn(y, 0)
+    
+    return x, np.transpose(y)[0]
 
 def Inverse(matrix_a, tol=None):
     CheckSquareness(matrix_a)

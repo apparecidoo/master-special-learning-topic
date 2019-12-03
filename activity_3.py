@@ -33,7 +33,6 @@ class Activity3:
         resultPca.fit(x)
         PcaData = resultPca.transform(x)
         resultLda2 = lda.Lda(PcaData, y)
-        print(resultLda2)
         LdaData = lda.Transform(PcaData, resultLda2, 2)
         plot.LdaIris2D(LdaData, y, names, 'LDA with PCA: Iris projection with first 2 linear discriminants')
 

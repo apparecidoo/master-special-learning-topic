@@ -12,20 +12,19 @@ def GenerateCentroid(k, data, method = 'random'):
         return RandomCentroid(k, data)
 
 def RandomCentroid(k, data):
-    centroid = _matrix.Create(k, 3)
-    dataGenerated = _matrix.Create(k, 3)
+    centroid = _matrix.Create(k, len(data[0]) + 1)
+    dataGenerated = _matrix.Create(k, len(data[0]) + 1)
 
     for i in range(k):
-        centroid[i][2] = i
+        centroid[i][-1] = i
         randVal = random.choice(data)
 
-        while(randVal[0] in np.transpose(dataGenerated)[0] and randVal[1] in np.transpose(dataGenerated)[1]): # get differents centroids
+        while(randVal[0] in np.transpose(dataGenerated)[0]): # get differents centroids
             randVal = random.choice(data)
 
-        dataGenerated[i][0] = randVal[0]
-        dataGenerated[i][1] = randVal[1]
-        centroid[i][0] = randVal[0]
-        centroid[i][1] = randVal[1]
+        for j in range(len(randVal)):
+            dataGenerated[i][j] = randVal[j]
+            centroid[i][j] = randVal[j]
     
     return np.asarray(centroid)
 
@@ -40,10 +39,13 @@ def DistancePoints(firstPoint, secondPoint, typeDist = 'euclidean'):
             return EuclideanDistance(firstPoint, secondPoint)
 
 def EuclideanDistance(firstPoint, secondPoint):
-    return math.sqrt((secondPoint[0] - firstPoint[0])**2 + (secondPoint[1] - firstPoint[1])**2)
+    sub = np.subtract(secondPoint, firstPoint)
+    sub = sub**2
+    return math.sqrt(sum(sub))
 
 def ManhattanDistance(firstPoint, secondPoint):
-    return abs((secondPoint[0] - firstPoint[0]) + (secondPoint[1] - firstPoint[1]))
+    sub = np.subtract(secondPoint, firstPoint)
+    return sum(math.sqrt(sub**2))
 
 # Stop Criteria
 def StopCriteria(data, newData, criteria = 'default'):
@@ -56,31 +58,30 @@ def CheckEquals(data, newData):
     return np.array_equal(np.transpose(data)[len(data[0]) - 1], np.transpose(newData)[len(newData[0]) - 1])
 
 def UpdateCentroid(data, centroids):
-    sumCentroid = np.asarray(_matrix.Create(len(centroids), 4))
+    sumCentroid = np.asarray(_matrix.Create(len(centroids), len(centroids[0]) + 1))
     
     for i in range(len(centroids)):
-        sumCentroid[i][2] = i
+        sumCentroid[i][len(sumCentroid[0]) - 2] = i
 
     for row in range(len(data)):
-        sumCentroid[int(data[row][2])][0] += data[row][0]
-        sumCentroid[int(data[row][2])][1] += data[row][1]
-
-        sumCentroid[int(data[row][2])][3] += 1
+        for j in range(len(data[row]) - 1):
+            sumCentroid[int(data[row][-1])][j] += data[row][j]
+        sumCentroid[int(data[row][len(data[row]) - 1])][-1] += 1
 
     for row in range(len(sumCentroid)):
-        sumCentroid[row][0] = sumCentroid[row][0] / sumCentroid[row][3] if sumCentroid[row][3] >= 1 else sumCentroid[row][0]
-        sumCentroid[row][1] = sumCentroid[row][1] / sumCentroid[row][3] if sumCentroid[row][3] >= 1 else sumCentroid[row][1]
+        for j in range(len(sumCentroid[row]) - 2):
+            sumCentroid[row][j] = sumCentroid[row][j] / sumCentroid[row][-1] if sumCentroid[row][-1] >= 1 else sumCentroid[row][j]
     
-    return np.asarray(_matrix.RemoveColumn(sumCentroid, len(sumCentroid[0])))
+    return np.asarray(_matrix.RemoveColumn(sumCentroid, -1))
 
 def Classification(data, centroids):
     for row in range(len(data)): # for each row
         distance = 999999999999.0
         for i in range(len(centroids)): # for each centroid
-            distAux = DistancePoints([data[row][0], data[row][1]], [centroids[i][0], centroids[i][1]])
+            distAux = DistancePoints(np.asarray(_matrix.RemoveColumn(_matrix.Copy(data), -1))[row], np.asarray(_matrix.RemoveColumn(_matrix.Copy(centroids), -1)[i]))
             if(distAux < distance):
                 distance = distAux
-                data[row][2] = centroids[i][2]
+                data[row][-1] = centroids[i][-1]
 
 def Kmeans(data, k, centroidMethod = 'random', stopCriteria = 'default', distanceMethod = 'euclidean'):
     _data = np.asarray(_matrix.AddColumn(_matrix.Copy(data), -1)) # create new column for classification

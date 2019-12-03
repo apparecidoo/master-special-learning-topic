@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from mpl_toolkits import mplot3d
 
 def SimplePointData2D(data, title, labelx, labely):
     plt.xlabel(labelx)
@@ -42,12 +43,24 @@ def LdaIris2D(X_lda, y, label_dict, title = 'Plot Lda'):
     plt.tight_layout
     plt.show()
 
-def Kmeans2D(x, y, centroids = [[]], title = 'Kmeans'):
-    plt.title(title)
-    plt.scatter(x[:, 0], x[:, 1], s=50)    
-    plt.scatter(x[:, 0], x[:, 1], c=y, s=50, cmap='viridis')
-    
-    if(not centroids == [[]]):
-        plt.scatter(centroids[:, 0], centroids[:, 1], c='black', s=100, alpha=0.4)
+def Kmeans(x, y, centroids = [[]], title = 'Kmeans'):
+    if(len(x[0]) == 2): # 2 dimensions
+        plt.title(title)
+        plt.scatter(x[:, 0], x[:, 1], s=50)    
+        plt.scatter(x[:, 0], x[:, 1], c=y, s=50, cmap='viridis')
+        
+        if(not centroids == [[]]):
+            plt.scatter(centroids[:, 0], centroids[:, 1], c='black', s=100, alpha=0.4)
 
-    plt.show()
+        plt.show()
+    else:
+        if(len(x[0]) == 3):
+            plt.title(title)
+            fig = plt.figure(title, figsize=(5,5))
+            ax = fig.add_subplot(111, projection='3d')
+            ax.scatter(x[:,0], x[:,1], x[:,2], c=y , cmap='viridis', s=50)
+            if(not centroids == [[]]):
+                ax.scatter(centroids[:, 0], centroids[:, 1], centroids[:, 2], c='black', s=100, alpha=0.4)
+            plt.show()
+        else:
+            print('Cannot plot with 4 or more dimensions')
