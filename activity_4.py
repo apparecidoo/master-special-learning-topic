@@ -18,11 +18,11 @@ class Activity4:
 
         _data = np.asarray(_matrix.AddColumn(_matrix.Copy(readmatrix), -1)) # create new column for classification
         x1, y1 = _matrix.DivideXY(_data)
-        plot.Kmeans(x1, np.int_(y1), [[]], 'Plot pure data')
+        plot.Kmeans(x1, np.int_(y1), [[]], path + ' - Plot pure data')
 
         newData, centroids = kmeans.Kmeans(readmatrix, 3)
         x, y = _matrix.DivideXY(newData)
-        plot.Kmeans(x, np.int_(y), centroids, 'Plot Kmeans')
+        plot.Kmeans(x, np.int_(y), centroids, path + ' - Plot Kmeans')
 
         print("\n--------------------------------------------------")
     
@@ -30,14 +30,16 @@ class Activity4:
         data = [[1.9, 7.3], [3.4, 7.5], [2.5, 6.8], [1.5, 6.5], [3.5, 6.4], [2.2, 5.8], [3.4, 5.2], [3.6, 4], [5, 3.2], [4.5, 2.4], [6, 2.6], [1.9, 3], [1, 2.7], [1.9, 2.4], [0.8, 2], [1.6, 1.8], [1, 1]]
         _data = np.asarray(_matrix.AddColumn(_matrix.Copy(data), -1)) # create new column for classification
         x1, y1 = _matrix.DivideXY(_data)
-        plot.Kmeans(x1, np.int_(y1), [[]], path + ' - Plot pure data')
+        plot.Kmeans(x1, np.int_(y1), [[]], 'Plot pure data')
 
         newData, centroids = kmeans.Kmeans(data, 3)
         x, y = _matrix.DivideXY(newData)
-        plot.Kmeans(x, np.int_(y), centroids, path + ' - Plot Kmeans')
+        plot.Kmeans(x, np.int_(y), centroids, 'Plot Kmeans')
     
     def Exercise2(self):
         self.dataset_test("datasets/books_attend_grade.csv")
+        self.dataset_test("datasets/alpswater.csv")
+        self.dataset_test("datasets/us_census.csv")
 
     def Exercise3(self):
         iris = datasets.load_iris()
@@ -50,11 +52,11 @@ class Activity4:
 
         _data = np.asarray(_matrix.AddColumn(_matrix.Copy(PcaData), -1)) # create new column for classification
         x1, y1 = _matrix.DivideXY(_data)
-        plot.Kmeans(x1, np.int_(y1), [[]], 'Plot pure data')
+        plot.Kmeans(x1, np.int_(y1), [[]], 'Iris - Plot pure data')
 
         newData, centroids = kmeans.Kmeans(PcaData, 3)
         x, y = _matrix.DivideXY(newData)
-        plot.Kmeans(x, np.int_(y), centroids, 'Plot Kmeans')
+        plot.Kmeans(x, np.int_(y), centroids, 'Iris - Plot Kmeans')
 
     def test(self):
         self.Exercise1()
