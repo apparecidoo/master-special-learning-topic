@@ -12,3 +12,6 @@ Atividade 3
 
 Atividade 4
   - K-means  (kmeans.py | activity_4.py)
+
+Atividade 5
+  - Perceptron  (perceptron.py | activity_5.py)

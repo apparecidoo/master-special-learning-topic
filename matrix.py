@@ -118,6 +118,22 @@ def AddEndColumnPotentialLast(matrix, potential):
 
     return newmatrix
 
+def FilterByColumn(matrix, column, value):
+    newData = []
+    for i in range(len(matrix)):
+        if matrix[i][column] != value:
+            newData.append(matrix[i])
+    return np.asarray(newData)
+
+def FilterByY(matrix, y, value):
+    newData = []
+    newY = []
+    for i in range(len(matrix)):
+        if y[i] != 2:
+            newData.append(matrix[i])
+            newY.append(y[i])
+    return np.asarray(newData), np.asarray(newY)
+
 def CheckSquareness(A):
     if len(A) != len(A[0]):
         raise ArithmeticError("Matrix must be square to inverse.")
