@@ -67,8 +67,8 @@ def Kmeans(x, y, centroids = [[]], title = 'Kmeans'):
             print('Cannot plot with 4 or more dimensions')
 
 def Perceptron(data, labels, title, names=["",""]):
-    colors = ['r', 'b', 'g']
-    markers = ['x', 'o', '^']
+    colors = ['b', 'r', 'g']
+    markers = ['^', 's', 'o']
     
     mplt.title(title)
     mplt.xlabel("X")

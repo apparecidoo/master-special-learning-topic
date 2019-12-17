@@ -119,20 +119,20 @@ def AddEndColumnPotentialLast(matrix, potential):
     return newmatrix
 
 def FilterByColumn(matrix, column, value):
-    newData = []
+    newMatrix = []
     for i in range(len(matrix)):
         if matrix[i][column] != value:
-            newData.append(matrix[i])
-    return np.asarray(newData)
+            newMatrix.append(matrix[i])
+    return np.asarray(newMatrix)
 
 def FilterByY(matrix, y, value):
-    newData = []
+    newMatrix = []
     newY = []
     for i in range(len(matrix)):
         if y[i] != 2:
-            newData.append(matrix[i])
+            newMatrix.append(matrix[i])
             newY.append(y[i])
-    return np.asarray(newData), np.asarray(newY)
+    return np.asarray(newMatrix), np.asarray(newY)
 
 def CheckSquareness(A):
     if len(A) != len(A[0]):
