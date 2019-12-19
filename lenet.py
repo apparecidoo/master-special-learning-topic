@@ -3,53 +3,46 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import precision_score
 import numpy as np
 
-(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
+class Lenet:
+    def __init__(self):
+        self.lenet = self.__InitializeLenet()
 
-# print(x_train[0])
-x_train = np.array(x_train) / 255
-x_test = np.array(x_test) / 255
-# print(x_train[0])
+    def __InitializeLenet(self):
+        lenet = keras.models.Sequential()
 
-y_train = keras.utils.to_categorical(y_train)
-y_test = keras.utils.to_categorical(y_test)
+        lenet.add(keras.layers.Conv1D(
+            filters=6,
+            kernel_size=5,
+            activation='relu',
+            use_bias=True,
+            input_shape=(28, 28)))
+        lenet.add(keras.layers.MaxPooling1D(pool_size=2, strides=2))
 
-lenet = keras.models.Sequential()
+        lenet.add(keras.layers.Conv1D(filters=16, kernel_size=5, activation='relu', use_bias=True))
+        lenet.add(keras.layers.MaxPooling1D(pool_size=2, strides=2))
 
-lenet.add(keras.layers.Conv1D(
-    filters=6,
-    kernel_size=5,
-    activation='relu',
-    use_bias=True,
-    input_shape=(28, 28)))
-lenet.add(keras.layers.MaxPooling1D(pool_size=2, strides=2))
+        lenet.add(keras.layers.Flatten())
 
-lenet.add(keras.layers.Conv1D(filters=16, kernel_size=5, activation='relu', use_bias=True))
-lenet.add(keras.layers.MaxPooling1D(pool_size=2, strides=2))
+        lenet.add(keras.layers.Dense(120, activation='relu', use_bias=True))
+        lenet.add(keras.layers.Dense(84, activation='relu', use_bias=True))
+        lenet.add(keras.layers.Dense(10, activation='softmax', use_bias=True))
 
-lenet.add(keras.layers.Flatten())
-# lenet.add(keras.layers.Dropout(0.2))
+        lenet.compile(
+            loss=keras.losses.categorical_crossentropy,
+            optimizer=keras.optimizers.Adadelta(),
+            metrics=['accuracy']
+        )
 
-lenet.add(keras.layers.Dense(120, activation='relu', use_bias=True))
-# lenet.add(keras.layers.Dropout(0.2))
-lenet.add(keras.layers.Dense(84, activation='relu', use_bias=True))
-lenet.add(keras.layers.Dense(10, activation='softmax', use_bias=True))
+        return lenet
 
-lenet.compile(
-    loss=keras.losses.categorical_crossentropy,
-    optimizer=keras.optimizers.Adadelta(),
-    metrics=['accuracy']
-)
+    def Fit(self, x_train, y_train, epochs = 10, batch_size = 128):
+        self.lenet.fit(x_train, y_train, epochs = epochs, batch_size = batch_size)
 
-lenet.fit(x_train, y_train, epochs=10, batch_size=128)
+    def Predict(self,x_test):
+        return self.lenet.predict(x_test)
 
-score = lenet.evaluate(x_test, y_test, verbose=0)
-print('Test loss:', score)
-print('Test accuracy:', score)
+    def Evaluate(self, x_test, y_test):
+        return self.lenet.evaluate(x_test, y_test, verbose=0)
 
-y_pred = lenet.predict(x_test)
-
-y_test = np.argmax(y_test, axis=1)
-y_pred = np.argmax(y_pred, axis=1)
-
-print()
-print(confusion_matrix(y_test, y_pred))
+    def ConfusionMatrix(self, y_test, y_pred):
+        return confusion_matrix(y_test, y_pred)

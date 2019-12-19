@@ -15,3 +15,9 @@ Atividade 4
 
 Atividade 5
   - Perceptron  (perceptron.py | activity_5.py)
+
+Atividade 6
+  - Multilayer Perceptron  (multilayer_perceptron.py | activity_6.py) - não executada
+
+Atividade 7
+  - CNN (LeNet-5)  (lenet.py | activity_7.py)
